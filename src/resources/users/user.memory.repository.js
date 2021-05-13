@@ -1,13 +1,14 @@
 const db = require('../../common/db');
+const {USERS} = require('../../common/constants');
 
-const getAll = async () => db.getAll();
+const create = async(body) => db.create(USERS, body);
 
-const get = async (id) => db.get(id)
+const getAll = async() => db.getAll(USERS);
 
-const create = async (body) => db.create(body)
+const get = async(id) => db.getOne(USERS, id);
 
-const update = async (id, body) => db.update(id, body)
+const update = async(id, body) => db.update(USERS, id, body);
 
-const deleteUser = async (id) => db.deleteUser(id)
+const deleteUser = async(id) => db.deleteOne(USERS, id);
 
-module.exports = { getAll, get, create, update, deleteUser };
+module.exports = {getAll, get, create, update, deleteUser};
