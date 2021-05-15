@@ -1,113 +1,63 @@
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
 const Task = require('../resources/tasks/task.model');
-const Column = require('../resources/boards/column.model');
-const c = require("./constants");
+const c = require('./constants');
 
-const users = [];
-const boards = [];
-let tasks = [];
+const DB = {
+  users: [],
+  boards: [],
+  tasks: [],
+};
 
+const getAll = table => DB[ table ];
+const get = (table, id) => DB[ table ].find(i => i.id === id);
 
-users.push(new User(),new User(),new User())
-boards.push(new Board(),new Board(),new Board())
-tasks.push(new Task(),new Task(),new Task())
-
-
-const getAll = (type) => {
-  switch (type) {
+const create = (table, body) => {
+  let model;
+  switch (table) {
     case c.USERS:
-      return JSON.parse(JSON.stringify(users));
+      model = new User(body);
+      break;
     case c.BOARDS:
-      return JSON.parse(JSON.stringify(boards));
+      model = new Board(body);
+      break;
     case c.TASKS:
-      return JSON.parse(JSON.stringify(tasks));
+      model = new Task(body);
+      break;
     default:
       return {};
   }
+  DB[ table ].push(model);
+  return get(table, model.id);
 };
 
-const getOne = (type, id) => {
-  switch (type) {
-    case c.USERS:
-      return users.find(u => id === u.id);
-    case c.BOARDS:
-      return boards.find(b => id === b.id);
-    case c.TASKS:
-      return tasks.find(t => id === t.id);
-    default:
-      return {};
+const update = async(table, id, body) => {
+  const idxOfItem = DB[ table ].findIndex(i => i.id === id);
+  if (idxOfItem !== -1) {
+    DB[ table ][ idxOfItem ] = {...DB[ table ][ idxOfItem ], ...body};
   }
+  return get(table, id);
 };
 
-const create = (type, body) => {
-  switch (type) {
-    case c.USERS: {
-      const newUser = new User(body)
-      users.push(newUser);
-      return getOne(c.USERS, newUser.id);
-    }
-    case c.BOARDS: {
-      const {title, columns} = body;
-      const newColumns = columns.map(el => new Column(el));
-      const newBoard = new Board({title, columns: newColumns});
-      boards.push(newBoard);
-      return newBoard;
-    }
-    case c.TASKS: {
-      const newTask = new Task(body);
-      tasks.push(newTask);
-      return newTask;
-    }
-    default:
-      return {};
+const deleteById = (table, id) => {
+  DB[ table ] = DB[ table ].filter(i => i.id !== id);
+  return {};
+};
+
+const deleteBoardAndTasks = (id) => {
+  DB.boards = DB.boards.filter(b => b.id !== id);
+  DB.tasks = DB.tasks.filter(t => t.boardId !== id);
+  return {};
+};
+
+const deleteUserAndUnassignTasks = (id) => {
+  DB.users = DB.boards.filter(b => b.id !== id);
+  const userTasks = getAll(c.TASKS);
+  if (userTasks) {
+    userTasks.forEach((task, index) => {userTasks[ index ].userId = null;});
+    DB.tasks = [ ...DB.tasks, ...userTasks ];
   }
+  return {};
 };
 
-const update = (type, id, body) => {
-  switch (type) {
-    case c.USERS: {
-      let user = getOne(id);
-      if (!user) {
-        throw new Error('Such user is not found');
-      }
-      user = {...user, ...body};
-
-      const index = users.findIndex(u => u.id === id);
-      users[ index ] = user;
-      return user;
-    }
-    case c.BOARDS:
-      return boards.find(b => id === b.id);
-    case c.TASKS:
-      return tasks.find(t => id === t.id);
-    default:
-      return {};
-  }
-};
-
-const deleteOne = (type, id) => {
-  switch (type) {
-    case c.USERS: {
-      const findUser = users.indexOf(u => u.id === id);
-      if (!findUser) {
-        throw new Error('Such user is not found');
-      }
-      const userTasks = getAll(c.TASKS).filter(t => t.userId === id)
-      if (userTasks) {
-        userTasks.forEach((task, index) => {userTasks[ index ].userId = null;});
-        tasks = [tasks, ...userTasks]
-      }
-      users.splice(findUser, 1);
-      return {};
-    }
-    case c.BOARDS:
-      return boards.find(b => id === b.id);
-    case c.TASKS:
-      return tasks.find(t => id === t.id);
-    default:
-      return {};
-  }
-};
-
-module.exports = {getAll, getOne, create, update, deleteOne};
+module.exports = {getAll, get, create, update, deleteById, deleteBoardAndTasks, deleteUserAndUnassignTasks};

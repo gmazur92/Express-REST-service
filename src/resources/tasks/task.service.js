@@ -4,7 +4,7 @@ const getAll = () => tasksRepo.getAll();
 
 const get = (id) => tasksRepo.get(id);
 
-const create = (body) => tasksRepo.create(body);
+const create = (id, body) => tasksRepo.create(id, body);
 
 const update = (id, body) => tasksRepo.update(id, body);
 
