@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const boardController = require('./board.controller')
+const BoardController = require('./board.controller');
 
-router.get('/', boardController.getAll )
-router.get('/:id', boardController.get )
-router.post('/', boardController.create )
-router.put('/:id', boardController.update )
-router.delete('/:id', boardController.deleteById )
+router.get('/', BoardController.getAll);
+router.get('/:id', BoardController.get);
+router.post('/', BoardController.create);
+router.put('/:id', BoardController.update);
+router.delete('/:id', BoardController.deleteById);
 
 module.exports = router;
