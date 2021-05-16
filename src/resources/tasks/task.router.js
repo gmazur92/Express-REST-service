@@ -1,10 +1,10 @@
 const router = require('express').Router({mergeParams: true});
-const taskController = require('./task.controller')
+const TaskController = require('./task.controller');
 
-router.get('/', taskController.getAll )
-router.get('/:id', taskController.get )
-router.post('/', taskController.create )
-router.put('/:id', taskController.update )
-router.delete('/:id', taskController.deleteById )
+router.get('/', TaskController.getAll);
+router.get('/:id', TaskController.get);
+router.post('/', TaskController.create);
+router.put('/:id', TaskController.update);
+router.delete('/:id', TaskController.deleteById);
 
 module.exports = router;

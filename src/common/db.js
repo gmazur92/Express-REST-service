@@ -4,9 +4,9 @@ const Task = require('../resources/tasks/task.model');
 const c = require('./constants');
 
 const DB = {
-  users: [],
-  boards: [],
-  tasks: [],
+  users: [new User(),new User()],
+  boards: [new Board(),new Board()],
+  tasks: [new Task(), new Task()],
 };
 
 const getAll = table => DB[ table ];
