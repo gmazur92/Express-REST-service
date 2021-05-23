@@ -2,16 +2,34 @@ const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
 const Task = require('../resources/tasks/task.model');
 const c = require('./constants');
-
+/**
+ * Create DB mock
+ * @type {{boards: Board[], users: User[], tasks: Task[]}}
+ */
 const DB = {
-  users: [new User(),new User()],
-  boards: [new Board(),new Board()],
-  tasks: [new Task(), new Task()],
+  users: [ new User(), new User() ],
+  boards: [ new Board(), new Board() ],
+  tasks: [ new Task(), new Task() ],
 };
-
+/**
+ * Function returns all records in specified table
+ * @param {string} table
+ * @returns Array<Board|User|Task>
+ */
 const getAll = table => DB[ table ];
+/**
+ * Function returns single record from specified table
+ * @param {{}} table  - name of table - USER/BOARD/TASK
+ * @param {string} id - id of specified entity
+ * @returns {Board|User|Task}
+ */
 const get = (table, id) => DB[ table ].find(i => i.id === id);
-
+/**
+ * Function creates a new entity in specified table
+ * @param {string} table - name of table - USER/BOARD/TASK
+ * @param {Board|User|Task} body
+ * @returns {Board|User|Task|{}}
+ */
 const create = (table, body) => {
   let model;
   switch (table) {
@@ -30,34 +48,41 @@ const create = (table, body) => {
   DB[ table ].push(model);
   return get(table, model.id);
 };
-
-const update = async(table, id, body) => {
+/**
+ * Updates entity in the specified table
+ * @param {string} table -   name of table - USER/BOARD/TASK
+ * @param {string} id - userId/boardId/taskId
+ * @param {{}} body - params to be updated in specified entity
+ * @returns {Board|User|Task|{}}
+ */
+const update = (table, id, body) => {
   const idxOfItem = DB[ table ].findIndex(i => i.id === id);
   if (idxOfItem !== -1) {
     DB[ table ][ idxOfItem ] = {...DB[ table ][ idxOfItem ], ...body};
   }
   return get(table, id);
 };
-
+/**
+ *  Deletes entity with provided id from db
+ * @param {string} table - name of table - USER/BOARD/TASK
+ * @param {string} id -  userId/boardId/taskId
+ * @returns {{}} - returns empty object
+ */
 const deleteById = (table, id) => {
   DB[ table ] = DB[ table ].filter(i => i.id !== id);
   return {};
 };
-
-const deleteBoardAndTasks = (id) => {
-  DB.boards = DB.boards.filter(b => b.id !== id);
-  DB.tasks = DB.tasks.filter(t => t.boardId !== id);
-  return {};
-};
-
-const deleteUserAndUnassignTasks = (id) => {
-  DB.users = DB.boards.filter(b => b.id !== id);
-  const userTasks = getAll(c.TASKS);
-  if (userTasks) {
-    userTasks.forEach((task, index) => {userTasks[ index ].userId = null;});
-    DB.tasks = [ ...DB.tasks, ...userTasks ];
+/**
+ * Update all table rows
+ * @param {string} table - name of table - USER/BOARD/TASK
+ * @param {Array<Board|User|Task>} rows - array of boards / users / tasks
+ * @returns {Array<Board|User|Task>} - return list of all updated rows in a table
+ */
+const updateTableRows = (table, rows) => {
+  if (rows) {
+    DB[ table ] = rows;
   }
-  return {};
+  return getAll(table);
 };
 
-module.exports = {getAll, get, create, update, deleteById, deleteBoardAndTasks, deleteUserAndUnassignTasks};
+module.exports = {getAll, get, create, update, deleteById, updateTableRows};
