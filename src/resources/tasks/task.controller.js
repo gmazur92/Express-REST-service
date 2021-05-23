@@ -17,7 +17,7 @@ module.exports = class TaskController {
 
   static async create(req, res) {
     const newTask = {...req.body, boardId: req.params.boardId};
-    const createdTask = await taskService.create(req.params.id, newTask);
+    const createdTask = await taskService.create(newTask);
     res.status(201).json(Task.toResponse(createdTask));
   };
 
