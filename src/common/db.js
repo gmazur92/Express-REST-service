@@ -2,6 +2,7 @@ const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
 const Task = require('../resources/tasks/task.model');
 const c = require('./constants');
+
 /**
  * Create DB mock
  * @type {{boards: Board[], users: User[], tasks: Task[]}}
@@ -11,12 +12,14 @@ const DB = {
   boards: [ new Board(), new Board() ],
   tasks: [ new Task(), new Task() ],
 };
+
 /**
  * Function returns all records in specified table
  * @param {string} table
  * @returns Array<Board|User|Task>
  */
 const getAll = table => DB[ table ];
+
 /**
  * Function returns single record from specified table
  * @param {{}} table  - name of table - USER/BOARD/TASK
@@ -24,6 +27,7 @@ const getAll = table => DB[ table ];
  * @returns {Board|User|Task}
  */
 const get = (table, id) => DB[ table ].find(i => i.id === id);
+
 /**
  * Function creates a new entity in specified table
  * @param {string} table - name of table - USER/BOARD/TASK
@@ -48,6 +52,7 @@ const create = (table, body) => {
   DB[ table ].push(model);
   return get(table, model.id);
 };
+
 /**
  * Updates entity in the specified table
  * @param {string} table -   name of table - USER/BOARD/TASK
@@ -62,6 +67,7 @@ const update = (table, id, body) => {
   }
   return get(table, id);
 };
+
 /**
  *  Deletes entity with provided id from db
  * @param {string} table - name of table - USER/BOARD/TASK
@@ -72,6 +78,7 @@ const deleteById = (table, id) => {
   DB[ table ] = DB[ table ].filter(i => i.id !== id);
   return {};
 };
+
 /**
  * Update all table rows
  * @param {string} table - name of table - USER/BOARD/TASK
