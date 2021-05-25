@@ -25,7 +25,7 @@ const create = (body) => boardsRepo.create(body);
  * Update board
  * @param {string} id id of board to be updated
  * @param {Board} body object with data to update
- * @returns {Promise<Board>} returns updated board
+ * @returns {Promise<Board>} returns promise with updated board
  */
 const update = (id, body) => boardsRepo.update(id, body);
 
@@ -33,7 +33,7 @@ const update = (id, body) => boardsRepo.update(id, body);
  * Delete board from db
  * @async
  * @param {string} id id of board to be deleted
- * @returns {Promise<{}>} returns an empty object if board deleted
+ * @returns {Promise<{}>} returns promise with an empty object if board deleted
  */
 const deleteBoard = async(id) => {
   await boardsRepo.deleteBoard(id);

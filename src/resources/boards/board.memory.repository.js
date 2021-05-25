@@ -4,7 +4,7 @@ const {BOARDS} = require('../../common/constants');
 /**
  * Request to db to create a new board
  * @param {Board} body board to be created
- * @returns {Promise<Board>} returns promise of created board
+ * @returns {Promise<Board>} returns promise with  created board
  */
 const create = async(body) => db.create(BOARDS, body);
 
@@ -25,14 +25,14 @@ const get = async(id) => db.get(BOARDS, id);
  * Update board
  * @param {string} id id of board to be updated
  * @param {Board} body object with data to update
- * @returns {Promise<Board>} returns updated board
+ * @returns {Promise<Board>} returns promise with updated board
  */
 const update = async(id, body) => db.update(BOARDS, id, body);
 
 /**
  * Delete board from db
  * @param {string} id id of board to be deleted
- * @returns {Promise<{}>} returns an empty object if board deleted
+ * @returns {Promise<{}>} returns promise with an empty object if board deleted
  */
 const deleteBoard = async(id) => db.deleteById(BOARDS, id);
 
