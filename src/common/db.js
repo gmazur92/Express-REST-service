@@ -16,25 +16,25 @@ const DB = {
 /**
  * Function returns all records in specified table
  * @param {string} table
- * @returns Array<Board|User|Task>
+ * @returns Promise<Array<Board|User|Task>>
  */
-const getAll = table => DB[ table ];
+const getAll = async table => DB[ table ];
 
 /**
  * Function returns single record from specified table
  * @param {{}} table  - name of table - USER/BOARD/TASK
  * @param {string} id - id of specified entity
- * @returns {Board|User|Task}
+ * @returns Promise<Board|User|Task>
  */
-const get = (table, id) => DB[ table ].find(i => i.id === id);
+const get = async(table, id) => DB[ table ].find(i => i.id === id);
 
 /**
  * Function creates a new entity in specified table
  * @param {string} table - name of table - USER/BOARD/TASK
  * @param {Board|User|Task} body
- * @returns {Board|User|Task|{}}
+ * @returns Promise<Board|User|Task|Object>
  */
-const create = (table, body) => {
+const create = async(table, body) => {
   let model;
   switch (table) {
     case c.USERS:
@@ -57,10 +57,10 @@ const create = (table, body) => {
  * Updates entity in the specified table
  * @param {string} table -   name of table - USER/BOARD/TASK
  * @param {string} id - userId/boardId/taskId
- * @param {{}} body - params to be updated in specified entity
- * @returns {Board|User|Task|{}}
+ * @param {Object} body - params to be updated in specified entity
+ * @returns Promise<Board|User|Task|Object>
  */
-const update = (table, id, body) => {
+const update = async(table, id, body) => {
   const idxOfItem = DB[ table ].findIndex(i => i.id === id);
   if (idxOfItem !== -1) {
     DB[ table ][ idxOfItem ] = {...DB[ table ][ idxOfItem ], ...body};
@@ -72,9 +72,9 @@ const update = (table, id, body) => {
  *  Deletes entity with provided id from db
  * @param {string} table - name of table - USER/BOARD/TASK
  * @param {string} id -  userId/boardId/taskId
- * @returns {{}} - returns empty object
+ * @returns Promise<Object> - returns empty object
  */
-const deleteById = (table, id) => {
+const deleteById = async(table, id) => {
   DB[ table ] = DB[ table ].filter(i => i.id !== id);
   return {};
 };
@@ -83,9 +83,9 @@ const deleteById = (table, id) => {
  * Update all table rows
  * @param {string} table - name of table - USER/BOARD/TASK
  * @param {Array<Board|User|Task>} rows - array of boards / users / tasks
- * @returns {Array<Board|User|Task>} - return list of all updated rows in a table
+ * @returns Promise<Array<Board|User|Task>> - return list of all updated rows in a table
  */
-const updateTableRows = (table, rows) => {
+const updateTableRows = async(table, rows) => {
   if (rows) {
     DB[ table ] = rows;
   }
