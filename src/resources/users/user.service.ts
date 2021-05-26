@@ -1,4 +1,4 @@
-const usersRepo = require('./user.memory.repository');
+const usersRepo = require('./user.memory.repository.ts');
 const tasksService = require('../tasks/task.service')
 
 /**
