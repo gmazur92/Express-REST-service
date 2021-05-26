@@ -22,7 +22,7 @@ const getAll = async table => DB[ table ];
 
 /**
  * Function returns single record from specified table
- * @param {{}} table  - name of table - USER/BOARD/TASK
+ * @param {string} table  - name of table - USER/BOARD/TASK
  * @param {string} id - id of specified entity
  * @returns Promise<Board|User|Task>
  */
