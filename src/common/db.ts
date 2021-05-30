@@ -1,16 +1,23 @@
-const User = require('../resources/users/user.model');
-const Board = require('../resources/boards/board.model');
-const Task = require('../resources/tasks/task.model');
-const c = require('./constants');
+import User, { IUser, IUserProps } from '../resources/users/user.model';
+import Board, { IBoard, IBoardProps } from '../resources/boards/board.model';
+import Task, { ITask, ITaskProps } from '../resources/tasks/task.model';
+
+export type TableType = 'users' | 'boards' | 'tasks';
+type TablesType = (IUser | ITask | IBoard)[];
+type ModelsType = IBoard & IUser & ITask;
+type ModelType = IBoard | IUser | ITask;
+type ParamsType = IUserProps | IBoardProps | ITaskProps;
+type DbType = { [ key: string ]: ModelsType[] };
 
 /**
  * Create DB mock
  * @type {{boards: Board[], users: User[], tasks: Task[]}}
  */
-const DB = {
-  users: [ new User(), new User() ],
-  boards: [ new Board(), new Board() ],
-  tasks: [ new Task(), new Task() ],
+
+const DB: DbType = {
+  users: [],
+  boards: [],
+  tasks: [],
 };
 
 /**
@@ -18,7 +25,7 @@ const DB = {
  * @param {string} table
  * @returns Promise<Array<Board|User|Task>>
  */
-const getAll = async table => DB[ table ];
+const getAll = async(table: TableType): Promise<ModelsType[]> => DB[ table ]!;
 
 /**
  * Function returns single record from specified table
@@ -26,7 +33,8 @@ const getAll = async table => DB[ table ];
  * @param {string} id - id of specified entity
  * @returns Promise<Board|User|Task>
  */
-const get = async(table, id) => DB[ table ].find(i => i.id === id);
+
+const get = async(table: TableType, id: string): Promise<ModelsType> => (DB[ table ] as TablesType).find((i: ModelType) => i.id === id) as ModelsType
 
 /**
  * Function creates a new entity in specified table
@@ -34,23 +42,22 @@ const get = async(table, id) => DB[ table ].find(i => i.id === id);
  * @param {Board|User|Task} body
  * @returns Promise<Board|User|Task|Object>
  */
-const create = async(table, body) => {
+const create = async(
+  table: TableType,
+  body: ParamsType,
+): Promise<ModelsType> => {
   let model;
-  switch (table) {
-    case c.USERS:
-      model = new User(body);
-      break;
-    case c.BOARDS:
-      model = new Board(body);
-      break;
-    case c.TASKS:
-      model = new Task(body);
-      break;
-    default:
-      return {};
+  if (table === 'users') {
+    model = new User(<IUserProps>body);
   }
-  DB[ table ].push(model);
-  return get(table, model.id);
+  if (table === 'boards') {
+    model = new Board(<IBoardProps>body);
+  }
+  if (table === 'tasks') {
+    model = new Task(<ITaskProps>body);
+  }
+  (DB[ table ] as TablesType).push(model as ModelsType);
+  return get(table, (model as ModelsType).id);
 };
 
 /**
@@ -60,10 +67,13 @@ const create = async(table, body) => {
  * @param {Object} body - params to be updated in specified entity
  * @returns Promise<Board|User|Task|Object>
  */
-const update = async(table, id, body) => {
-  const idxOfItem = DB[ table ].findIndex(i => i.id === id);
+const update = async(table: TableType, id: string, body: ModelType): Promise<ModelsType> => {
+  const idxOfItem = DB[ table ]!.findIndex((i: ModelsType) => i.id === id);
   if (idxOfItem !== -1) {
-    DB[ table ][ idxOfItem ] = {...DB[ table ][ idxOfItem ], ...body};
+    (DB[ table ]![ idxOfItem ] as ModelType) = {
+      ...DB[ table ]![ idxOfItem ],
+      ...body,
+    };
   }
   return get(table, id);
 };
@@ -74,9 +84,11 @@ const update = async(table, id, body) => {
  * @param {string} id -  userId/boardId/taskId
  * @returns Promise<Object> - returns empty object
  */
-const deleteById = async(table, id) => {
-  DB[ table ] = DB[ table ].filter(i => i.id !== id);
-  return {};
+const deleteById = async(table: TableType, id: string): Promise<boolean> => {
+  (DB[ table ] as TablesType) = (DB[ table ] as TablesType).filter(
+    (i: ModelType) => i.id !== id,
+  );
+  return true;
 };
 
 /**
@@ -85,11 +97,11 @@ const deleteById = async(table, id) => {
  * @param {Array<Board|User|Task>} rows - array of boards / users / tasks
  * @returns Promise<Array<Board|User|Task>> - return list of all updated rows in a table
  */
-const updateTableRows = async(table, rows) => {
+const updateTableRows = async(table: TableType, rows: ModelType[]): Promise<ModelsType[]> => {
   if (rows) {
-    DB[ table ] = rows;
+    (DB[ table ] as TablesType) = rows;
   }
   return getAll(table);
 };
 
-module.exports = {getAll, get, create, update, deleteById, updateTableRows};
+export default {getAll, get, create, update, deleteById, updateTableRows};
