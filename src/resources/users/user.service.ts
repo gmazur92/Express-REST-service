@@ -1,25 +1,26 @@
-const usersRepo = require('./user.memory.repository.ts');
-const tasksService = require('../tasks/task.service')
+import { IUser, IUserProps } from './user.model';
+import * as usersRepo from './user.memory.repository';
+import tasksService from '../tasks/task.service';
 
 /**
  * Get all users from db
  * @returns {Promise<Array<User>>} returns promise with array of users
  */
-const getAll = () => usersRepo.getAll();
+const getAll = (): Promise<IUser[]> => usersRepo.getAll();
 
 /**
  * Get a single user from db
  * @param {string} id  user id
  * @returns {Promise<User>} returns promise with single user
  */
-const get = (id) => usersRepo.get(id);
+const get = (id: string): Promise<IUser> => usersRepo.get(id);
 
 /**
  * Create a new user in db
  * @param {User} body object with user data
  * @returns {Promise<User>}  returns promise with created user
  */
-const create = (body) => usersRepo.create(body);
+const create = (body: IUserProps): Promise<IUser> => usersRepo.create(body);
 
 /**
  * Update a user in db
@@ -27,7 +28,8 @@ const create = (body) => usersRepo.create(body);
  * @param {User} body object with data
  * @returns {Promise<User>}  returns promise with updated user
  */
-const update = (id, body) => usersRepo.update(id, body);
+const update = (id: string, body: IUser): Promise<IUser> =>
+  usersRepo.update(id, body);
 
 /**
  * Delete user from db
@@ -35,9 +37,9 @@ const update = (id, body) => usersRepo.update(id, body);
  * @param {string} id user id
  * @returns {Promise<{}>}  returns promise with empty object if user deleted
  */
-const deleteUser = async (id) => {
+const deleteUser = async (id: string): Promise<void> => {
   await usersRepo.deleteUser(id);
-  await tasksService.unassignTasks(id)
+  await tasksService.unassignTasks(id);
 };
 
-module.exports = {getAll, get, create, update, deleteUser};
+export { getAll, get, create, update, deleteUser };
