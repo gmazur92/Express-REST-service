@@ -17,7 +17,7 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "ES3",
+    "target": "es2020",
     "module": "CommonJS",
     "sourceMap": true,
     "declaration": true,
