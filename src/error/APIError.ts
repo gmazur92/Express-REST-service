@@ -6,8 +6,3 @@ export class APIError extends BaseError {
     super(name, statusCode, description, isOperational);
   }
 }
-export class HTTP400Error extends BaseError {
-  constructor(description = '') {
-    super('PAGE NOT FOUND', StatusCodes.NOT_FOUND, description, true);
-  }
-}
