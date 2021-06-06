@@ -26,21 +26,12 @@ app.use('/', (req: Request, res: Response, next) => {
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards/:boardId/tasks', taskRouter);
-app.use('/damage', () => {
-  try {
-    Promise.reject('WOO');
-  } catch (e) {
-    throw new Error(e);
-  }
-});
 
 app.use('*', (_req: Request, _res: Response) => {
   throw new HTTP400Error();
 });
 
-app.use(async(err: BaseError, req: Request, res: Response, next: NextFunction) => {
-    return errorHandler.handleError(err, req, res, next);
-});
+app.use(async(err: BaseError, req: Request, res: Response, next: NextFunction) => errorHandler.handleError(err, req, res, next));
 
 process
   .on('uncaughtException', (error: Error) => {
