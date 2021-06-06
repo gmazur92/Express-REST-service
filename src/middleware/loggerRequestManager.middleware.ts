@@ -2,7 +2,7 @@ import express from 'express';
 import { finished } from 'stream';
 import { logger } from '../logger/logger';
 
-export const loggerRequestManager = (req: express.Request, res: express.Response, next: express.NextFunction): any => {
+export const loggerRequestManager = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const {url, method, query, body} = req;
   const queryParams = JSON.stringify(query);
   const payload = JSON.stringify(body);
