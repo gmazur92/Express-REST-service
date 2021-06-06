@@ -4,7 +4,7 @@ import { BaseError } from '../error/BaseError';
 import { logger } from '../logger/logger';
 
 class ErrorHandler {
-  public handleError = async(err: BaseError, _req: Request, res: Response, _next: NextFunction): Promise<void> => {
+  public handleError = (err: BaseError, _req: Request, res: Response, _next: NextFunction) => {
     const isErrorSafeForClient = this.isTrustedError(err);
     const clientError = isErrorSafeForClient
       ? {
@@ -19,7 +19,7 @@ class ErrorHandler {
         data: {},
       };
 
-    await logger.error('', clientError);
+    logger.error('', clientError);
     clientError.data = {};
     res.status(clientError.status).send({error: clientError});
   };

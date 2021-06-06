@@ -20,8 +20,8 @@ const customLevels = {
   },
 };
 
-const myFormat = winston.format.printf( (asd: any):any => {
-  const { timestamp, level, message, ...meta } = asd;
+const myFormat = winston.format.printf( (params) => {
+  const { timestamp, level, message, ...meta } = params;
   const obj = JSON.stringify(meta)
     return `${timestamp} [${level}]: ${message} ${obj}`;
 });
@@ -70,27 +70,27 @@ class Logger {
     winston.addColors(customLevels.colors);
   }
 
-  trace(msg: string, meta?: any) {
+  trace<T>(msg: string, meta?: T) {
     this.logger.log('trace', msg, meta);
   }
 
-  debug(msg: string, meta?: any) {
+  debug<T>(msg: string, meta?: T) {
     this.logger.debug(msg, meta);
   }
 
-  info(msg: string, meta?: any) {
+  info<T>(msg: string, meta?: T) {
     this.logger.info(msg, meta);
   }
 
-  warn(msg: string, meta?: any) {
+  warn<T>(msg: string, meta?: T) {
     this.logger.warn(msg, meta);
   }
 
-  error(msg: string, meta?: any) {
+  error<T>(msg: string, meta?: T) {
     this.logger.error(msg, meta);
   }
 
-  fatal(msg: string, meta?: any) {
+  fatal<T>(msg: string, meta?: T) {
     this.logger.log('fatal', msg, meta);
   }
 }
