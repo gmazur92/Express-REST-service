@@ -9,7 +9,7 @@ import { errorHandler } from './middleware/handleError.middleware';
 import { BaseError } from './error/BaseError';
 import { logger } from './logger/logger';
 import { loggerRequestManager } from './middleware/loggerRequestManager.middleware';
-import { HTTP400Error } from './error/errors';
+import { HTTP404Error } from './error/NotFoundError';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -28,7 +28,7 @@ app.use('/boards', boardRouter);
 app.use('/boards/:boardId/tasks', taskRouter);
 
 app.use('*', (_req: Request, _res: Response) => {
-  throw new HTTP400Error();
+  throw new HTTP404Error();
 });
 
 app.use(async(err: BaseError, req: Request, res: Response, next: NextFunction) => errorHandler.handleError(err, req, res, next));
