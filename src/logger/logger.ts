@@ -1,7 +1,6 @@
 import winston from 'winston';
 import { NODE_ENV } from '../common/config';
 
-const { combine, timestamp } = winston.format;
 const customLevels = {
   levels: {
     trace: 5,
@@ -39,6 +38,8 @@ const formatter = winston.format.combine(
   }),
 );
 
+const { combine, timestamp } = winston.format;
+
 class Logger {
   private logger: winston.Logger;
 
@@ -62,7 +63,6 @@ class Logger {
       levels: customLevels.levels,
       format: combine(
         timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-        timestamp(),
         myFormat
       ),
       transports: isDevEnvironment() ? transport : prodTransport,
