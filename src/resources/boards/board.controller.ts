@@ -1,43 +1,70 @@
 import express from 'express';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import Board, { IBoard } from './board.model';
 import boardsService from './board.service';
 
 class BoardController {
   static async getAll(_req: express.Request, res: express.Response) {
-    const boards: IBoard[] = await boardsService.getAll();
-    res.json(boards.map(Board.toResponse));
+    try {
+      const boards: IBoard[] = await boardsService.getAll();
+      if (!boards) {
+        return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+      }
+      return res.json(boards.map(Board.toResponse));
+    } catch (e) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+    }
+
   }
 
   static async get(req: express.Request, res: express.Response) {
-    const {id} = req.params
-    const board = await boardsService.get(id!);
-    if (!board) {
-      res.status(404).json({});
+    const {id} = req.params;
+    try {
+      const board = await boardsService.get(id!);
+      if (!board) {
+        return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+      }
+      return res.json(Board.toResponse(board));
+    } catch (e) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
     }
-    res.json(Board.toResponse(board));
   }
 
   static async create(req: express.Request, res: express.Response) {
-    const newBoard: IBoard = await boardsService.create(req.body);
-    res.status(201).json(Board.toResponse(newBoard));
+    try {
+      const newBoard: IBoard = await boardsService.create(req.body);
+      return res.status(StatusCodes.CREATED).json(Board.toResponse(newBoard));
+    } catch (e) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+    }
   }
 
   static async update(req: express.Request, res: express.Response) {
-    const {id} = req.params
-    const updatedBoard: IBoard = await boardsService.update(
-      id!,
-      req.body
-    );
-    res.status(200).json(Board.toResponse(updatedBoard));
+    const {id} = req.params;
+    try {
+      const updatedBoard: IBoard = await boardsService.update(
+        id!,
+        req.body,
+      );
+      if (!updatedBoard) {
+        return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+      }
+      return res.status(StatusCodes.OK).json(Board.toResponse(updatedBoard));
+    } catch (e) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+    }
   }
 
   static async deleteById(req: express.Request, res: express.Response) {
-    const {id} = req.params
+    const {id} = req.params;
     try {
       await boardsService.deleteBoard(id!);
-      res.status(204).json({});
+      if (!boardsService) {
+        return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+      }
+      return res.status(StatusCodes.NO_CONTENT).json();
     } catch (e) {
-      res.status(404).json({});
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
     }
   }
 }
