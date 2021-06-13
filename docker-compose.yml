@@ -36,6 +36,3 @@ services:
 networks:
   net:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.55.0/24
