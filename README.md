@@ -65,6 +65,23 @@ If you're using VSCode, you can get a better developer experience from integrati
 npm run lint
 ```
 
+### Running application via Docker
+
+Build Docker images
+
+```
+docker compose build
+```
+Start Docker
+```
+docker compose up
+```
+Once app started it will be available on port **4000**.
+
+Database files located in **./db**
+
+Logs located in **./logs**
+
 ### Debugging in VSCode
 
 Press <kbd>F5</kbd> to debug.
