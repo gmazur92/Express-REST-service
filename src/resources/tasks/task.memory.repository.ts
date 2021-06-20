@@ -1,53 +1,60 @@
-import { ITask, ITaskProps } from './task.model';
-import db from '../../common/db';
-import {TASKS} from '../../common/constants'
+import { getRepository } from 'typeorm';
+import { ITaskProps } from './dto/requestTask.dto';
+import { TaskEntity } from '../../entity/Task.entity';
 
 /**
  * Get all tasks from db
- * @returns {Promise<Array<Task>>} returns promise with all tasks
+ * @returns {Promise<Array<TaskEntity>>} returns promise with all tasks
  */
-const getAll = async (): Promise<ITask[]> => db.getAll(TASKS);
+const getAll = async (): Promise<TaskEntity[]> => {
+  const taskRepository = getRepository(TaskEntity);
+  return taskRepository.find();
+};
 
 /**
  * Get single task from db
  * @param {string} id task id
- * @returns {Promise<Task>} returns promise with  single task
+ * @returns {Promise<TaskEntity>} returns promise with  single task
  */
-const get = async (id: string): Promise<ITask> => db.get(TASKS, id);
+const get = async (id: string): Promise<TaskEntity|undefined> => {
+  const taskRepository = getRepository(TaskEntity);
+  return taskRepository.findOne(id);
+};
 
 /**
  * Create a new task
- * @param {Task} body body of task model to be created
- * @returns {Promise<Task>} returns promise with created task
+ * @param {ITaskProps} body body of task model to be created
+ * @returns {Promise<TaskEntity>} returns promise with created task
  */
-const create = async (body: ITaskProps): Promise<ITask> =>
-  db.create(TASKS, body);
+const create = async (body: ITaskProps): Promise<TaskEntity> => {
+  const taskRepository = getRepository(TaskEntity);
+  return taskRepository.save(body);
+};
 
 /**
  * Update task in db
  * @param {string} id id of a task to be updated
- * @param {Task} body params to be updated
- * @returns {Promise<Task>} return promise withs updated task
+ * @param {TaskEntity} body params to be updated
+ * @returns {Promise<TaskEntity>} return promise withs updated task
  */
-const update = async (id: string, body: ITask): Promise<ITask> =>
-  db.update(TASKS, id, body);
+const update = async (id: string, body: TaskEntity): Promise<TaskEntity|null> => {
+  const taskRepository = getRepository(TaskEntity);
+  const task: TaskEntity|undefined = await taskRepository.findOne(id);
+  if (!task) return null;
+  const updatedTask = {...task, ...body};
+  return taskRepository.save(updatedTask);
+};
 
 /**
  * Delete task from db
  * @param {string} id id of task to be deleted
- * @returns {Promise<{}>} returns promise with  empty object if task deleted
+ * @returns {Promise<TaskEntity|null>} returns promise with  empty object if task deleted
  */
-const deleteTask = async (id: string): Promise<boolean> => {
-  const deleted = db.deleteById(TASKS, id);
-  return !!deleted;
-}
+const deleteTask = async (id: string): Promise<TaskEntity|null> => {
+  const taskRepository = getRepository(TaskEntity);
+  const taskToRemove: TaskEntity|undefined = await taskRepository.findOne(id);
+  if (!taskToRemove) return null;
+  return taskRepository.remove(taskToRemove);
+};
 
-/**
- * Update all tasks in db
- * @param {Array<Task>} tasks an array of tasks which are to be updated in db
- * @returns {Promise<Array<Task>>} returns promise with updated array of tasks
- */
-const updateTableRows = async (tasks: ITask[]): Promise<ITask[]> =>
-  db.updateTableRows(TASKS, tasks);
-
-export default { getAll, get, create, update, deleteTask, updateTableRows };
+export default {getAll, get, create, update, deleteTask};
