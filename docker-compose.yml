@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  node:
+    build: .
+    image: gmazur92/node
+    restart: on-failure
+    command: npm run start
+    ports:
+    - ${PORT}:${PORT}
+    volumes:
+    - ./src:/usr/app/src
+    - ./logs:/usr/app/logs
+    depends_on:
+      - postgres
+    environment:
+      - PORT=4000
+    networks:
+      - net
+
+  postgres:
+    build: ./database/
+    image: gmazur92/postgres
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
