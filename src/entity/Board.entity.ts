@@ -1,6 +1,6 @@
 import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { UserEntity } from './User.entity';
 import { ColumnEntity } from './Column.entity';
+import type { UserEntity } from './User.entity';
 
 @Entity({name: 'board'})
 export class BoardEntity {
@@ -9,11 +9,11 @@ export class BoardEntity {
   id?: string;
 
   @Column('varchar', {length: 25})
-  title: string;
+  title?: string;
 
-  @OneToOne(() => UserEntity, user => user.board, {primary: true})
-  user: UserEntity;
+  @OneToOne('UserEntity', 'board')
+  user?: UserEntity;
 
   @Column('jsonb', {nullable: true})
-  columns: ColumnEntity[] | [];
+  columns?: ColumnEntity[] | [];
 }

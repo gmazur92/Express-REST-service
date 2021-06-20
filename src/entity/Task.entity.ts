@@ -6,19 +6,19 @@ import { BoardEntity }from './Board.entity';
 export class TaskEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column('varchar', {length: 25})
-  title: string;
+  title?: string;
 
   @Column('int')
   order?: number;
 
   @Column('text')
-  description: string;
+  description?: string;
 
   @Column('varchar', { nullable: true })
-  userId: string | null;
+  userId?: string | null;
 
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.id, {
     onDelete: "SET NULL",
@@ -26,7 +26,7 @@ export class TaskEntity {
   })
 
   @JoinColumn({ name: 'userId' })
-  user: string | null;
+  user?: string | null;
 
   @Column('varchar', { nullable: true })
   boardId?: string | null;

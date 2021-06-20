@@ -1,21 +1,21 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { BoardEntity } from './Board.entity';
+import type { BoardEntity } from './Board.entity';
 
 @Entity({name: 'user'})
 export class UserEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column('varchar', {length: 50})
-  name: string;
+  name?: string;
 
   @Column('varchar', {length: 50})
-  login: string;
+  login?: string;
 
   @Column('varchar', {length: 50})
-  password: string;
+  password?: string;
 
-  @OneToMany(() => BoardEntity, board => board.user, {primary: true})
-  board: BoardEntity;
+  @OneToMany('BoardEntity', 'user')
+  board?: BoardEntity;
 }

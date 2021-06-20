@@ -4,11 +4,11 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 export class ColumnEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column('varchar', {length: 25})
-  title: string;
+  title?: string;
 
   @Column()
-  order: number;
+  order?: number;
 }
