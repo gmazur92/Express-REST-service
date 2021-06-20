@@ -24,7 +24,7 @@ class Column implements IColumn {
    * @param {string} title - column title
    * @param {number} order - order
    */
-  constructor({ title = 'COLUMN', order = 1 }: Partial<IColumnProps>) {
+  constructor({title = 'COLUMN', order = 1}: Partial<IColumnProps>) {
     this.title = title;
     this.order = order;
   }
