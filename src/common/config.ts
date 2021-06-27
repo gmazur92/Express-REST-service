@@ -13,4 +13,5 @@ export const { POSTGRES_USER } = process.env;
 export const { POSTGRES_PASSWORD } = process.env;
 export const { POSTGRES_DB } = process.env;
 export const { POSTGRES_HOST } = process.env;
+export const { JWT_SECRET_KEY } = process.env || 'supersecretkey'
 export const AUTH_MODE = authMode === 'true';
