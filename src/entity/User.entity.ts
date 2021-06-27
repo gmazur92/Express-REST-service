@@ -5,17 +5,17 @@ import type { BoardEntity } from './Board.entity';
 export class UserEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+  id!: string;
 
   @Column('varchar', {length: 50})
-  name?: string;
+  name!: string;
 
   @Column('varchar', {length: 50})
-  login?: string;
+  login!: string;
 
-  @Column('varchar', {length: 50})
-  password?: string;
+  @Column('varchar')
+  password!: string;
 
   @OneToMany('BoardEntity', 'user')
-  board?: BoardEntity;
+  board!: BoardEntity;
 }
