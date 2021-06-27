@@ -29,6 +29,15 @@ const get = async (id: string): Promise<UserEntity|undefined> => {
   const userRepository = getRepository(UserEntity);
   return userRepository.findOne(id);
 };
+/**
+ * Get a single user from db
+ * @param {string} login  user login
+ * @returns {Promise<UserEntity|undefined>} returns promise with single user
+ */
+const findByLogin = async (login: string): Promise<UserEntity|undefined> => {
+  const userRepository = getRepository(UserEntity);
+  return userRepository.findOne({login});
+};
 
 /**
  * Update a user in db
@@ -56,4 +65,4 @@ const deleteUser = async (id: string): Promise<UserEntity|null> => {
   return userRepository.remove(userToRemove);
 };
 
-export { getAll, get, create, update, deleteUser };
+export { getAll, get, create, update, deleteUser, findByLogin };
