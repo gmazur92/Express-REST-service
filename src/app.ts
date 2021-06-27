@@ -12,6 +12,7 @@ import { logger } from './logger/logger';
 import { loggerRequestManager } from './middleware/loggerRequestManager.middleware';
 import { HTTP404Error } from './error/NotFoundError';
 import authMiddleware from './middleware/auth.middleware';
+import { AUTH_MODE } from './common/config';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -28,7 +29,7 @@ app.use('/', (req: Request, res: Response, next) => {
 
 app.use('/login', authRouter);
 
-app.use(authMiddleware);
+if (AUTH_MODE) app.use(authMiddleware);
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
