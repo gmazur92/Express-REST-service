@@ -9,6 +9,7 @@ class ErrorHandler {
     const clientError = isErrorSafeForClient
       ? {
         message: err.name,
+        description: err.description,
         status: err.statusCode,
         data: err.stack,
       }
