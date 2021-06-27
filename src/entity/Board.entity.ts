@@ -1,19 +1,21 @@
-import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ColumnEntity } from './Column.entity';
+import { Entity, Column, OneToOne, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import type { ColumnEntity } from './Column.entity';
 import type { UserEntity } from './User.entity';
 
 @Entity({name: 'board'})
 export class BoardEntity {
 
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+  id!: string;
 
   @Column('varchar', {length: 25})
-  title?: string;
+  title!: string;
 
   @OneToOne('UserEntity', 'board')
-  user?: UserEntity;
+  user!: UserEntity;
 
-  @Column('jsonb', {nullable: true})
-  columns?: ColumnEntity[] | [];
+  @OneToMany('ColumnEntity', 'board', {cascade: true, onDelete:"CASCADE", onUpdate:"CASCADE"})
+
+  @JoinColumn()
+  columns!: ColumnEntity[]
 }
