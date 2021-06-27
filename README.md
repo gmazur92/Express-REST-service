@@ -27,6 +27,47 @@ After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
+### Running application via Docker
+
+Build Docker images
+
+```
+docker compose build
+```
+Start Docker
+```
+docker compose up
+```
+Once app started it will be available on port **4000**.
+
+Database files located in **./db**
+
+Logs located in **./logs**
+
+**Project has scripts to work with TypeORM migrations:**
+
+Generate migration:
+```
+npm run migration:generate NAME
+```
+Run migration:
+```
+npm run migration:run
+```
+Revert migration:
+```
+npm run migration:revert
+```
+You can access db via pgAdmin.
+
+Once you run the docker, by default pgAdmin will be available for you on
+```
+http://localhost:8080
+```
+Default credentials:
+**login**: test@test.com
+**password**: 123456
+
 ## Testing
 
 After application running open new terminal and enter:
@@ -64,23 +105,6 @@ If you're using VSCode, you can get a better developer experience from integrati
 ```
 npm run lint
 ```
-
-### Running application via Docker
-
-Build Docker images
-
-```
-docker compose build
-```
-Start Docker
-```
-docker compose up
-```
-Once app started it will be available on port **4000**.
-
-Database files located in **./db**
-
-Logs located in **./logs**
 
 ### Debugging in VSCode
 

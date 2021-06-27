@@ -2,6 +2,7 @@ version: '3'
 
 services:
   node:
+    container_name: node
     build: .
     image: gmazur92/node
     restart: on-failure
@@ -14,16 +15,20 @@ services:
     depends_on:
       - postgres
     environment:
-      - PORT=4000
+      PORT: ${PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
     networks:
       - net
 
   postgres:
+    container_name: postgres
     build: ./database/
     image: gmazur92/postgres
     restart: always
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - ./db:/var/lib/postgresql/data
     environment:
@@ -33,6 +38,22 @@ services:
     networks:
       - net
 
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - ${PGADMIN_PORT}:${PGADMIN_DEFAULT_PORT}
+    volumes:
+      - ./pg:/var/lib/pgadmin
+    networks:
+      - net
+    logging:
+      driver: none
 networks:
   net:
     driver: bridge

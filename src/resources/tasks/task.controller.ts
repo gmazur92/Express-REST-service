@@ -1,65 +1,70 @@
-import express from 'express';
+import { Request, NextFunction, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import Task, { ITask, ITaskProps } from './task.model';
+import { ITaskProps } from './dto/requestTask.dto';
 import taskService from './task.service';
+import { TaskEntity } from '../../entity/Task.entity';
+import { BoardEntity } from '../../entity/Board.entity';
 
 class TaskController {
-  static async getAll(_req: express.Request, res: express.Response) {
+  static async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
-      const tasks: ITask[] = await taskService.getAll();
+      const tasks: TaskEntity[] = await taskService.getAll();
       if (!tasks) {
         return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
       }
-      return res.json(tasks.map(Task.toResponse));
+      return res.json(tasks);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+      return next(e);
     }
   }
 
-  static async get(req: express.Request, res: express.Response) {
-    const {id} = req.params
+  static async get(req: Request<{id: string}>, res: Response, next: NextFunction) {
+    const {id} = req.params;
     try {
-      const task: ITask = await taskService.get(id!);
+      const task: TaskEntity|undefined = await taskService.get(id);
       if (!task) {
         return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
       }
       return res.json(task);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+      return next(e);
     }
   }
 
-  static async create(req: express.Request, res: express.Response) {
-    const {boardId} = req.params
+  static async create(req: Request<{boardId: string}>, res: Response, next: NextFunction) {
+    const {boardId} = req.params;
     try {
-      const newTask: ITaskProps = { ...req.body, boardId: boardId! };
-      const createdTask: ITask = await taskService.create(newTask);
-      return res.status(StatusCodes.CREATED).json(Task.toResponse(createdTask));
+      const newTask: ITaskProps = {...req.body, boardId};
+      const createdTask: TaskEntity = await taskService.create(newTask);
+      return res.status(StatusCodes.CREATED).json(createdTask);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+      return next(e);
     }
   }
 
-  static async update(req: express.Request, res: express.Response) {
-    const {id} = req.params
+  static async update(req: Request<{id: string}, BoardEntity>, res: Response, next: NextFunction) {
+    const {id} = req.params;
     try {
-      const updatedTask: ITask = await taskService.update(
-        id!,
-        req.body
+      const updatedTask: TaskEntity|null = await taskService.update(
+        id,
+        req.body,
       );
-      return res.status(StatusCodes.OK).json(Task.toResponse(updatedTask));
+      return res.status(StatusCodes.OK).json(updatedTask);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+      return next(e);
     }
   }
 
-  static async deleteById(req: express.Request, res: express.Response) {
-    const {id} = req.params
+  static async deleteById(req: Request<{id: string}>, res: Response, next: NextFunction) {
+    const {id} = req.params;
     try {
-      await taskService.deleteTask(id!);
-      return res.status(StatusCodes.NO_CONTENT).json();
+      const result = await taskService.deleteTask(id);
+      if (!result) {
+        return res.status(StatusCodes.NOT_FOUND).json(ReasonPhrases.NOT_FOUND);
+      }
+      return res.status(StatusCodes.NO_CONTENT).json(ReasonPhrases.NO_CONTENT);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
+      return next(e);
     }
   }
 }
