@@ -50,7 +50,7 @@ class BoardController {
       if (!updatedBoard) {
         return res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
       }
-      return res.status(StatusCodes.OK).json(BoardEntity);
+      return res.status(StatusCodes.OK).json(updatedBoard);
     } catch (e) {
       return next(e);
     }

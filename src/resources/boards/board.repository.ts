@@ -18,7 +18,7 @@ const create = async (body: IBoardProps): Promise<BoardEntity> => {
  */
 const getAll = async (): Promise<BoardEntity[]> => {
   const boardRepository = getRepository(BoardEntity);
-  return boardRepository.find();
+  return boardRepository.find({ relations: ['columns'] });
 };
 
 /**
@@ -28,7 +28,7 @@ const getAll = async (): Promise<BoardEntity[]> => {
  */
 const get = async (id: string): Promise<BoardEntity|undefined> => {
   const boardRepository = getRepository(BoardEntity);
-  return boardRepository.findOne(id);
+  return boardRepository.findOne({ where: { id }, relations: ['columns'] });
 };
 
 /**
