@@ -5,14 +5,16 @@ import {
   Body,
   Param,
   Delete,
-  Inject, Put, HttpCode, NotFoundException,
+  Inject, Put, HttpCode, NotFoundException, UseGuards,
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskServiceInterface } from './interface/task.service.interface';
 import { Task } from './entities/task.entity';
+import { AuthGuard } from '../../auth/auth.guard';
 
 @Controller('/boards/:boardId/tasks')
+@UseGuards(AuthGuard)
 export class TaskController {
   constructor(
     @Inject('TaskServiceInterface')
@@ -31,7 +33,7 @@ export class TaskController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Task|undefined> {
-    const task: Task | undefined = await this.taskService.findOne(id);
+    const task: Task|undefined = await this.taskService.findOne(id);
     if (!task) {
       throw new NotFoundException('No task found');
     }
@@ -48,6 +50,6 @@ export class TaskController {
   async remove(@Param('boardId') boardId: string, @Param('id') id: string): Promise<any> {
     const a = await this.taskService.remove(boardId, id);
     console.log(a);
-  return {};
+    return {};
   }
 }

@@ -8,9 +8,11 @@ export interface UserServiceInterface {
 
   findAll(): Promise<User[]>;
 
-  findOne(id: string): Promise<User | undefined>;
+  findOne(id: string): Promise<User|undefined>;
 
-  update(id: string, dto: UpdateUserDto): Promise<User | undefined>;
+  findOneByLogin(login: string): Promise<User|undefined>
+
+  update(id: string, dto: UpdateUserDto): Promise<User|undefined>;
 
   remove(id: string): Promise<DeleteResult>;
 }

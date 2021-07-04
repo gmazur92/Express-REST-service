@@ -8,8 +8,7 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
-  ) {}
+    @InjectRepository(User) private userRepository: Repository<User>) {}
 
   public async create(userDto: CreateUserDto): Promise<User> {
     const user = new User();
@@ -23,16 +22,20 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  public async findOne(id: string): Promise<User | undefined> {
+  public async findOne(id: string): Promise<User|undefined> {
     return await this.userRepository.findOne(id);
   }
 
+  public async findOneByLogin(login: string): Promise<User|undefined> {
+    return await this.userRepository.findOne({where: login});
+  }
+
   public async update(id: string, dto: UpdateUserDto) {
-    const user: User | undefined = await this.findOne(id);
+    const user: User|undefined = await this.findOne(id);
     if (!user) {
       return null;
     }
-    const updatedUser: Partial<User> = { ...user, ...dto };
+    const updatedUser: Partial<User> = {...user, ...dto};
     return await this.userRepository.save(updatedUser);
   }
 

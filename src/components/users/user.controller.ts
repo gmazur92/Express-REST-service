@@ -7,15 +7,17 @@ import {
   HttpCode,
   Get,
   Param,
-  Delete, Put,
+  Delete, Put, UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserServiceInterface } from './interface/user.service.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { IUser, IUserResponse } from './interface/user.interface';
+import { AuthGuard } from '../../auth/auth.guard';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UserController {
   constructor(
     @Inject('UserServiceInterface')
