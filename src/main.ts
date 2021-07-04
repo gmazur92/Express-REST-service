@@ -9,9 +9,6 @@ const start = async () => {
     const PORT = 4000;
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     app.useGlobalPipes(new ValidationPipe());
-
-
-
     const config = new DocumentBuilder()
     .setTitle('Express-REST-Service')
     .build();
