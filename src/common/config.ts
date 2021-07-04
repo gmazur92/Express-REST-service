@@ -14,6 +14,9 @@ import { Board } from '../components/boards/entities/board.entity';
 import { Task } from '../components/tasks/entities/task.entity';
 import { Column } from '../components/boards/entities/column.entity';
 
+import {tablesInit1624125987676} from '../migrations/1624125987676-tablesInit'
+import {Admin1624215029004} from '../migrations/1624215029004-admin'
+
 export const config = () => ({
   database: {
     type: 'postgres',
@@ -24,11 +27,14 @@ export const config = () => ({
     password: process.env['POSTGRES_PASSWORD'],
     entities: [User, Board, Task, Column],
     migrationsRun: true,
-    synchronize: true,
+    synchronize: false,
     logging: false,
-    migrations: ['src/migration/*.ts'],
+    migrations: [tablesInit1624125987676,Admin1624215029004],
     cli: {
-      migrationsDir: 'src/migration',
+      migrationsDir: 'migrations',
     },
+  },
+  app: {
+    use_fastify: process.env['USE_FASTIFY'],
   },
 });

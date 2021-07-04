@@ -21,6 +21,7 @@ export class AuthService {
       throw new UnauthorizedException({message: 'Invalid login or password'});
     }
     const token = this.jwtService.sign({login: user.login, password: user.password});
+    console.log(token);
     return {token};
   }
 }
