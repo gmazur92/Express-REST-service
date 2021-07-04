@@ -1,4 +1,4 @@
-import boardsRepo from './board.memory.repository';
+import boardsRepo from './board.repository';
 import { IBoardProps } from './dto/requestBoard.dto';
 import { BoardEntity } from '../../entity/Board.entity';
 
@@ -28,8 +28,7 @@ const create = (dto: IBoardProps): Promise<BoardEntity> => boardsRepo.create(dto
  * @param {BoardEntity} body object with data to update
  * @returns {Promise<BoardEntity|null>} returns promise with updated board
  */
-const update = (id: string, body: BoardEntity): Promise<BoardEntity|null> =>
-  boardsRepo.update(id, body);
+const update = (id: string, body: BoardEntity): Promise<BoardEntity|null> => boardsRepo.update(id, body);
 
 /**
  * Delete board from db

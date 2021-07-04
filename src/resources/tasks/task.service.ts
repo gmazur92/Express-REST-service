@@ -1,4 +1,4 @@
-import tasksRepo from './task.memory.repository';
+import tasksRepo from './task.repository';
 import { ITaskProps } from './dto/requestTask.dto';
 import { TaskEntity } from '../../entity/Task.entity';
 
