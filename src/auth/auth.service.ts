@@ -1,7 +1,6 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
-// import { UserService } from '../components/users/user.service';
 import { AuthDto } from './dto/auth.dto';
 import { UserServiceInterface } from '../components/users/interface/user.service.interface';
 
@@ -10,7 +9,6 @@ export class AuthService {
   constructor(
     @Inject('UserServiceInterface')
     private readonly userService: UserServiceInterface,
-    // private userService: UserService,
     private jwtService: JwtService) {};
 
   async signIn(dto: AuthDto): Promise<{token: string}> {
