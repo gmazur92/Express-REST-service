@@ -5,13 +5,13 @@ import {
   Body,
   Param,
   Delete,
-  Inject, Put, HttpCode, NotFoundException, UseGuards,
+  Inject, Put, HttpCode, NotFoundException, UseGuards, HttpException,
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskServiceInterface } from './interface/task.service.interface';
-import { Task } from './entities/task.entity';
 import { AuthGuard } from '../../auth/auth.guard';
+import { ITaskInterface } from './interface/task.interface';
 
 @Controller('/boards/:boardId/tasks')
 @UseGuards(AuthGuard)
@@ -22,18 +22,22 @@ export class TaskController {
   ) {}
 
   @Post()
-  create(@Param('boardId') boardId: string, @Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.taskService.create(boardId, createTaskDto);
+  async create(@Param('boardId') boardId: string, @Body() createTaskDto: CreateTaskDto): Promise<ITaskInterface> {
+    const task: ITaskInterface|undefined = await this.taskService.create(boardId, createTaskDto);
+    if (!task) {
+      throw new HttpException('Task is not created.', 500);
+    }
+    return task;
   }
 
   @Get()
-  findAll(): Promise<Task[]> {
+  async findAll(): Promise<ITaskInterface[]> {
     return this.taskService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Task|undefined> {
-    const task: Task|undefined = await this.taskService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<ITaskInterface> {
+    const task: ITaskInterface|undefined = await this.taskService.findOne(id);
     if (!task) {
       throw new NotFoundException('No task found');
     }
@@ -41,8 +45,12 @@ export class TaskController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(id, updateTaskDto);
+  async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto): Promise<ITaskInterface> {
+    const task: ITaskInterface|undefined = await this.taskService.update(id, updateTaskDto);
+    if (!task) {
+      throw new NotFoundException('No task found');
+    }
+    return task;
   }
 
   @HttpCode(204)

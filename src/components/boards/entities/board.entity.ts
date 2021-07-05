@@ -8,9 +8,10 @@ import {
 } from 'typeorm';
 import type { User } from '../../users/entities/user.entity';
 import type { Column } from './column.entity';
+import { IBoardInterface } from '../interface/board.interface';
 
 @Entity('board')
-export class Board {
+export class Board implements IBoardInterface {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

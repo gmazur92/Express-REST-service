@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>) {}
 
-  public async create(userDto: CreateUserDto): Promise<User> {
+  async create(userDto: CreateUserDto): Promise<User> {
     const user = new User();
     user.password = userDto.password;
     user.login = userDto.login;
@@ -18,27 +18,25 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  public async findAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
 
-  public async findOne(id: string): Promise<User|undefined> {
+  async findOne(id: string): Promise<User|undefined> {
     return await this.userRepository.findOne(id);
   }
 
-  public async findOneByLogin(login: string): Promise<User|undefined> {
+  async findOneByLogin(login: string): Promise<User|undefined> {
     return await this.userRepository.findOne({login});
   }
 
-  public async update(id: string, dto: UpdateUserDto) {
+  async update(id: string, dto: UpdateUserDto): Promise<User|null> {
     const user: User|undefined = await this.findOne(id);
-    if (!user) {
-      return null;
-    }
-    return await this.userRepository.save({...user, ...dto});
+    if (!user) return null;
+    return this.userRepository.save({...user, ...dto});
   }
 
-  public async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.userRepository.delete({'id': id});
   }
 }

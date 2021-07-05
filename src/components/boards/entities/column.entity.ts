@@ -5,9 +5,10 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Board } from './board.entity';
+import { IColumnInterface } from '../interface/column.interface';
 
 @Entity('column')
-export class Column {
+export class Column implements IColumnInterface{
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
