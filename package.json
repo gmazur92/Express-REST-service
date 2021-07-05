@@ -19,7 +19,9 @@
     "migration:create": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config src/common/ormconfig.ts migration:create -n",
     "migration:generate": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config src/common/ormconfig.ts migration:generate -n",
     "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config src/common/ormconfig.ts migration:run",
-    "migration:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config src/common/ormconfig.ts migration:revert"
+    "migration:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js --config src/common/ormconfig.ts migration:revert",
+    "artillery": "artillery run --output report/report.json artillery.yaml",
+    "artillery-report": "artillery report --output report/report.html report/report.json"
   },
   "jest": {
     "testEnvironment": "node",
@@ -50,6 +52,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/dotenv": "^8.2.0",
     "@types/validator": "^13.6.2",
+    "artillery": "^1.7.6",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
