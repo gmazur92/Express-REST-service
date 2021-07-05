@@ -48,8 +48,6 @@ export class TaskController {
   @HttpCode(204)
   @Delete(':id')
   async remove(@Param('boardId') boardId: string, @Param('id') id: string): Promise<any> {
-    const a = await this.taskService.remove(boardId, id);
-    console.log(a);
-    return {};
+    return this.taskService.remove(boardId, id);
   }
 }
