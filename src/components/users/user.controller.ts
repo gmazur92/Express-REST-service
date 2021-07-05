@@ -1,4 +1,3 @@
-import { DeleteResult } from 'typeorm';
 import {
   Controller,
   Post,
@@ -61,7 +60,7 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(200)
-  public async remove(@Param('id') id: string): Promise<DeleteResult> {
+  public async remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
   }
 }

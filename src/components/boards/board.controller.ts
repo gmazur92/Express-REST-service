@@ -21,12 +21,12 @@ export class BoardController {
   ) {}
 
   @Post()
-  create(@Body() createBoardDto: CreateBoardDto) {
+  async create(@Body() createBoardDto: CreateBoardDto) {
     return this.boardService.create(createBoardDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.boardService.findAll();
   }
 
@@ -40,12 +40,12 @@ export class BoardController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
+  async update(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
     return this.boardService.update(id, updateBoardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<void> {
     return this.boardService.remove(id);
   }
 }

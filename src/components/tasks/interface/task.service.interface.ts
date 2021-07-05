@@ -1,4 +1,3 @@
-import { DeleteResult } from 'typeorm';
 import { Task } from '../entities/task.entity';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskDto } from '../dto/update-task.dto';
@@ -12,5 +11,5 @@ export interface TaskServiceInterface {
 
   update(id: string, dto: UpdateTaskDto): Promise<Task | undefined>;
 
-  remove(boardId: string, id: string): Promise<DeleteResult>;
+  remove(boardId: string, id: string): Promise<void>;
 }

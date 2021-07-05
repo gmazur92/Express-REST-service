@@ -11,15 +11,15 @@ export class BoardService {
     @InjectRepository(Board) private boardRepository: Repository<Board>,
   ) {}
 
-  create(createBoardDto: CreateBoardDto) {
+  async create(createBoardDto: CreateBoardDto) {
     return this.boardRepository.save(createBoardDto);
   }
 
-  findAll() {
+  async findAll() {
     return this.boardRepository.find({relations: ['columns']});
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.boardRepository.findOne({where: {id}, relations: ['columns']});
   }
 

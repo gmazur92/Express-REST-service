@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,7 +27,7 @@ export class UserService {
   }
 
   public async findOneByLogin(login: string): Promise<User|undefined> {
-    return await this.userRepository.findOne({where: login});
+    return await this.userRepository.findOne({login});
   }
 
   public async update(id: string, dto: UpdateUserDto) {
@@ -35,11 +35,10 @@ export class UserService {
     if (!user) {
       return null;
     }
-    const updatedUser: Partial<User> = {...user, ...dto};
-    return await this.userRepository.save(updatedUser);
+    return await this.userRepository.save({...user, ...dto});
   }
 
-  public async remove(id: string): Promise<DeleteResult> {
-    return await this.userRepository.delete(id);
+  public async remove(id: string): Promise<void> {
+    await this.userRepository.delete({'id': id});
   }
 }

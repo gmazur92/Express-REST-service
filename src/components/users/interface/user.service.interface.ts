@@ -1,4 +1,3 @@
-import { DeleteResult } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
@@ -14,5 +13,5 @@ export interface UserServiceInterface {
 
   update(id: string, dto: UpdateUserDto): Promise<User|undefined>;
 
-  remove(id: string): Promise<DeleteResult>;
+  remove(id: string): Promise<void>;
 }

@@ -11,17 +11,16 @@ export class TaskService {
     @InjectRepository(Task) private taskRepository: Repository<Task>,
   ) {}
 
-  async create(boardId: string, createTaskDto: CreateTaskDto) {
+  async create(boardId: string, createTaskDto: CreateTaskDto): Promise<Task> {
     const newTask: Partial<Task> = {...createTaskDto, boardId}
-    const a = await this.taskRepository.save(newTask);
-    return a;
+    return this.taskRepository.save(newTask);
   }
 
-  findAll() {
+  async findAll() {
     return this.taskRepository.find();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.taskRepository.findOne(id);
   }
 
@@ -32,7 +31,7 @@ export class TaskService {
     return this.taskRepository.save(updatedTask);
   }
 
-  remove(boardId: string, taskId: string): any {
-    return this.taskRepository.delete({ 'boardId': boardId, 'id': taskId });
+  async remove(boardId: string, taskId: string): Promise<void> {
+    await this.taskRepository.delete({ 'boardId': boardId, 'id': taskId });
   }
 }
