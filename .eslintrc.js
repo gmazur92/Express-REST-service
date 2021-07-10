@@ -1,0 +1,25 @@
+module.exports = {
+  "root": true,
+  "env": {
+    "es2020": true,
+    "jasmine": true,
+    "jest": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "settings": {"noInlineConfig": true},
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "import/extensions": "off",
+    "linebreak-style": "off",
+    "node/no-unsupported-features/es-syntax": "off",
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off"
+  }
+}

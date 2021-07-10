@@ -1,5 +1,4 @@
 import winston from 'winston';
-import { NODE_ENV } from '../common/config';
 
 const customLevels = {
   levels: {
@@ -45,7 +44,7 @@ class Logger {
 
   constructor() {
     const isDevEnvironment = () => {
-      const env = NODE_ENV || 'development';
+      const env = process.env['NODE_ENV'] || 'development';
       return env === 'development'
     };
     const prodTransport = [

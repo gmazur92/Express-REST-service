@@ -68,6 +68,18 @@ Default credentials:
 **login**: test@test.com
 **password**: 123456
 
+### Load test Express vs Fastify results:
+
+*Graphic results*:  
+**Open files in your browser:**  
+[Express result](./report/report-express.html)  
+[Fastify result](./report/report-fastify.html)    
+
+*JSON-like results:*  
+[Express result](./report/report-express.json)  
+[Fastify result](./report/report-fastify.json)  
+
+
 ## Testing
 
 After application running open new terminal and enter:
