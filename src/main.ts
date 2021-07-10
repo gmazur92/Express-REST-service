@@ -4,10 +4,21 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { logger } from './logger/logger';
+import { CustomExceptionFilter } from './filters/exception-filter';
+import { LoggingInterceptor } from './interceptors/requestLogger.interceptor';
+
+process.on('uncaughtException', (error: Error) => {
+  logger.error('uncaughtException', {stack: JSON.stringify(error.stack)});
+  setTimeout(() => process.exit(1), 1000);
+}).on('unhandledRejection', (error: Error) => {
+  logger.error('unhandledRejection', {stack: JSON.stringify(error.stack)});
+  setTimeout(() => process.exit(1), 1000);
+});
 
 const start = async () => {
   const PORT = process.env['PORT'];
-  const isFastify = process.env['USE_FASTIFY'];
+  const isFastify = process.env['USE_FASTIFY']
   try {
     let app: INestApplication;
 
@@ -20,7 +31,10 @@ const start = async () => {
       app = await NestFactory.create<NestExpressApplication>(AppModule);
     }
 
+    app.useGlobalInterceptors(new LoggingInterceptor());
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new CustomExceptionFilter());
+
     const config = new DocumentBuilder().setTitle('Express-REST-Service').build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/doc', app, document);

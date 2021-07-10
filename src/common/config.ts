@@ -1,14 +1,3 @@
-// export default () => ({
-//   PORT: process.env.PORT,
-//   NODE_ENV: process.env.NODE_ENV,
-//   POSTGRES_PORT: process.env.POSTGRES_PORT,
-//   POSTGRES_USER: process.env.POSTGRES_USER,
-//   POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
-//   POSTGRES_DB: process.env.POSTGRES_DB,
-//   POSTGRES_HOST: process.env.POSTGRES_HOST,
-//   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
-// });
-
 import { User } from '../components/users/entities/user.entity';
 import { Board } from '../components/boards/entities/board.entity';
 import { Task } from '../components/tasks/entities/task.entity';
@@ -33,8 +22,5 @@ export const config = () => ({
     cli: {
       migrationsDir: 'migrations',
     },
-  },
-  app: {
-    use_fastify: process.env['USE_FASTIFY'],
   },
 });
